@@ -11,26 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
+            Schema::create('payments', function (Blueprint $table) {
+        $table->id();
 
-            $table->foreignId('order_id')
-                ->constrained('orders')
-                ->cascadeOnDelete();
+        $table->foreignId('order_id')
+            ->constrained()
+            ->cascadeOnDelete();
 
-            $table->string('payment_method');
-            $table->enum('payment_status', [
-                'pending',
-                'paid',
-                'failed',
-                'expired'
-            ])->default('pending');
+        $table->enum('payment_method', [
+            'transfer',
+            'cash',
+            'qris'
+        ]);
 
-            $table->decimal('amount', 12, 2);
-            $table->dateTime('paid_at')->nullable();
-            $table->string('payment_reference')->nullable();
+        $table->decimal('amount', 12, 2);
 
-            $table->timestamps();
+        $table->enum('payment_status', [
+            'pending',
+            'paid',
+            'failed'
+        ])->default('pending');
+
+        $table->string('payment_proof')->nullable();
+
+        $table->timestamp('paid_at')->nullable();
+
+        $table->timestamps();
         });
     }
 
