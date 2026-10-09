@@ -14,30 +14,29 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('customer_id')
-                ->constrained('customers')
-                ->cascadeOnDelete();
+        $table->foreignId('customer_id')
+            ->constrained()
+            ->cascadeOnDelete();
 
-            $table->string('order_code')->unique();
-            $table->enum('order_type', ['pickup', 'delivery']);
-            $table->dateTime('order_date');
-            $table->dateTime('pickup_date')->nullable();
-            $table->text('delivery_address')->nullable();
-            $table->decimal('delivery_fee', 12, 2)->default(0);
-            $table->text('notes')->nullable();
-            $table->decimal('total_price', 12, 2)->default(0);
+        $table->string('order_number')->unique();
 
-            $table->enum('status', [
-                'pending',
-                'confirmed',
-                'processing',
-                'ready',
-                'delivering',
-                'completed',
-                'cancelled'
-            ])->default('pending');
+        $table->dateTime('order_date');
 
-            $table->timestamps();
+        $table->text('delivery_address')->nullable();
+
+        $table->text('notes')->nullable();
+
+        $table->decimal('total_amount', 12, 2)->default(0);
+
+        $table->enum('status', [
+            'pending',
+            'confirmed',
+            'processing',
+            'completed',
+            'cancelled'
+        ])->default('pending');
+
+        $table->timestamps();
         });
     }
 
