@@ -13,11 +13,15 @@ class CustomCake extends Model
     protected $fillable = [
         'order_id',
         'cake_type',
-        'flavor',
         'size',
+        'flavor',
         'theme',
         'message',
         'reference_image',
+        'description',
+        'estimated_price',
+        'final_price',
+        'status',
     ];
 
     public function order(): BelongsTo

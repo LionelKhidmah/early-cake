@@ -14,6 +14,7 @@ class Delivery extends Model
         'order_id',
         'delivery_method',
         'delivery_status',
+        'delivery_address',
     ];
 
     public function order(): BelongsTo
