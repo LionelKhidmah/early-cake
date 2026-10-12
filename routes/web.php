@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -7,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomCakeController;
+use App\Http\Controllers\PromoController;
 use App\Http\Controllers\OrderTrackingController;
 
 use App\Http\Controllers\Admin\DashboardController;
@@ -45,6 +45,23 @@ Route::get('/lacak-pesanan', [OrderTrackingController::class, 'index'])
 
 Route::post('/lacak-pesanan', [OrderTrackingController::class, 'track'])
     ->name('orders.track.submit');
+
+    
+ // Promo
+Route::get('/promo', [PromoController::class, 'index'])
+    ->name('promo.index');
+
+Route::get('/promo/{id}', [PromoController::class, 'show'])
+    ->name('promo.show');
+
+// Tentang Kami
+Route::view('/tentang-kami', 'customer.about')
+    ->name('about');
+
+// Kontak
+Route::view('/kontak', 'customer.contact')
+    ->name('contact');
+
 
 Route::middleware(['auth', 'verified'])
     ->prefix('admin')
