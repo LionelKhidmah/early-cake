@@ -1,3 +1,60 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-cream: #f5ede4;
+    --color-cream-50: #fdfaf6;
+    --color-rose-kue: #b5475a;
+    --color-rose-kue-dark: #9a3a4b;
+    --color-rose-soft: #f9e6e8;
+    --color-choco: #4a2c27;
+    --color-choco-light: #7a5a54;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-cream-50 text-choco antialiased;
+    }
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition;
+    }
+
+    .btn-primary {
+        @apply bg-rose-kue text-white hover:bg-rose-kue-dark;
+    }
+
+    .btn-outline {
+        @apply border border-choco/15 bg-white text-choco hover:bg-cream;
+    }
+
+    .nav-link {
+        @apply relative text-sm text-choco-light transition-colors hover:text-choco;
+    }
+
+    .nav-link::after {
+        content: '';
+        @apply absolute -bottom-1 left-0 h-0.5 w-0 bg-rose-kue transition-all duration-300;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.is-active::after {
+        @apply w-full;
+    }
+
+    .nav-link.is-active {
+        @apply font-semibold text-choco;
+    }
+}
