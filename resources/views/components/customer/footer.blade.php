@@ -31,9 +31,9 @@
 
         <div class="mt-8 flex flex-col gap-3 border-t border-cream/15 pt-5 text-xs text-cream/60 md:flex-row md:items-center md:justify-between">
             <p>
-                Jl. Cittadri No. 24
-                <span class="mx-1">·</span> WhatsApp 0812-3456-7890
-                <span class="mx-1">·</span> Setiap hari 08.00–20.00 WIB
+                Jl. Manyar Rejo III No. 4, Kota Surabaya, Jawa Timur 60119, Indonesia
+                <span class="mx-1">·</span> WhatsApp 0877-2261-9655
+                <span class="mx-1">·</span> Setiap hari 10.00–21.00 WIB
             </p>
             <p>&copy; {{ date('Y') }} Early Cake</p>
         </div>

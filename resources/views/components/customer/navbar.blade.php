@@ -1,12 +1,14 @@
 @php
     $links = [
-        ['label' => 'Menu',         'route' => 'products.index',    'pattern' => 'menu*'],
-        ['label' => 'Promo',        'route' => 'promo.index',       'pattern' => 'promo*'],
-        ['label' => 'Kue Custom',   'route' => 'custom-cake.index', 'pattern' => 'kue-custom*'],
-        ['label' => 'Tentang Kami', 'route' => 'about',             'pattern' => 'tentang-kami*'],
-        ['label' => 'Kontak',       'route' => 'contact',           'pattern' => 'kontak*'],
+        ['label' => 'Home',        'route' => 'home',               'pattern' => ''],
+        ['label' => 'Menu',        'route' => 'products.index',     'pattern' => 'produk*'],
+        ['label' => 'Promo',       'route' => 'promo.index',        'pattern' => 'promo*'],
+        ['label' => 'Kue Custom',  'route' => 'custom-cake.index',  'pattern' => 'custom-cake*'],
+        ['label' => 'Tentang Kami','route' => 'about',              'pattern' => 'tentang-kami*'],
+        ['label' => 'Kontak',      'route' => 'contact',            'pattern' => 'kontak*'],
     ];
 @endphp
+
 
 <header id="site-header" class="sticky top-0 z-50 border-t-[3px] border-choco bg-cream-50/90 backdrop-blur transition-shadow">
     <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 lg:px-8" aria-label="Navigasi utama">
