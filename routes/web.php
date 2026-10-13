@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomCakeController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderTrackingController;
 
 use App\Http\Controllers\Admin\DashboardController;
@@ -55,12 +56,15 @@ Route::get('/promo/{id}', [PromoController::class, 'show'])
     ->name('promo.show');
 
 // Tentang Kami
-Route::view('/tentang-kami', 'customer.about')
+Route::view('/tentang-kami', '.about')
     ->name('about');
 
 // Kontak
-Route::view('/kontak', 'customer.contact')
+Route::get('/kontak', [ContactController::class, 'index'])
     ->name('contact');
+
+Route::post('/kontak', [ContactController::class, 'send'])
+    ->name('contact.send');
 
 
 Route::middleware(['auth', 'verified'])

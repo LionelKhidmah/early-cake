@@ -14,7 +14,7 @@ class ProductController extends Controller
             ->latest()
             ->paginate(12);
 
-        return view('products.index', compact('products'));
+        return view('customer.products.index', compact('products'));
     }
 
     //menampilkan detail produk
@@ -24,7 +24,7 @@ class ProductController extends Controller
 
         $product->load('category');
 
-        return view('products.show', compact('product'));
+        return view('customer.products.show', compact('product'));
     }
 }
 

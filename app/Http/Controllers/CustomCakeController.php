@@ -16,7 +16,7 @@ class CustomCakeController extends Controller
      */
     public function index()
     {
-        return view('custom-cakes.index');
+        return view('customer.custom-cake.index');
     }
 
     /**

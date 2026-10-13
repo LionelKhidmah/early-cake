@@ -12,7 +12,12 @@ use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
-    
+
+public function index()
+{
+    return view('customer.checkout.index');
+}
+
 public function store(Request $request)
 {
     $validated = $request->validate([
