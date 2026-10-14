@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->string('cake_type');
             $table->string('flavor');
+            $table->string('size')->nullable();
             $table->string('theme')->nullable();
             $table->string('message')->nullable();
             $table->string('reference_image')->nullable();
