@@ -9,6 +9,8 @@ use App\Http\Controllers\CustomCakeController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderTrackingController;
+use App\Http\Controllers\CartController;
+
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -25,6 +27,20 @@ Route::get('/produk', [ProductController::class, 'index'])
 
 Route::get('/produk/{product}', [ProductController::class, 'show'])
     ->name('products.show');
+
+// Keranjang belanja
+
+Route::get('/keranjang', [CartController::class, 'index'])
+    ->name('cart.index');
+
+Route::post('/keranjang/tambah', [CartController::class, 'add'])
+    ->name('cart.add');
+
+Route::post('/keranjang/perbarui', [CartController::class, 'update'])
+    ->name('cart.update');
+
+Route::post('/keranjang/hapus', [CartController::class, 'remove'])
+    ->name('cart.remove');
 
 // Checkout tanpa login
 Route::get('/checkout', [CheckoutController::class, 'index'])

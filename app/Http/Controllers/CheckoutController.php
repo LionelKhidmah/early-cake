@@ -15,7 +15,45 @@ class CheckoutController extends Controller
 
 public function index()
 {
-    return view('customer.checkout.index');
+    $cart = session()->get('cart', []);
+
+    $items = [];
+    $total = 0;
+
+    foreach ($cart as $productId => $quantity) {
+        $product = Product::find($productId);
+
+        if (! $product || ! $product->is_available) {
+            continue;
+        }
+
+        $quantity = (int) $quantity;
+
+        if ($quantity < 1) {
+            continue;
+        }
+
+        $subtotal = (float) $product->price * $quantity;
+
+        $items[] = [
+            'product' => $product,
+            'product_id' => $product->id,
+            'quantity' => $quantity,
+            'subtotal' => $subtotal,
+        ];
+
+        $total += $subtotal;
+    }
+
+    if (count($items) === 0) {
+        return redirect()
+            ->route('cart.index')
+            ->withErrors([
+                'cart' => 'Keranjang masih kosong. Silakan pilih produk terlebih dahulu.',
+            ]);
+    }
+
+    return view('customer.checkout.index', compact('items', 'total'));
 }
 
 public function store(Request $request)
