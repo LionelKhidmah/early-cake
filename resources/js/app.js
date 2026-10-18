@@ -1,4 +1,7 @@
 import './bootstrap';
+import './catalog';
+import './cart';
+
 
 import Alpine from 'alpinejs';
 
@@ -36,17 +39,4 @@ document.addEventListener('DOMContentLoaded', () => {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Jumlah keranjang (disimpan di localStorage)
-    const cartCount = document.getElementById('cart-count');
-    const updateCart = () => {
-        try {
-            const items = JSON.parse(localStorage.getItem('early_cake_cart') || '[]');
-            if (cartCount) cartCount.textContent = items.length;
-        } catch {
-            if (cartCount) cartCount.textContent = '0';
-        }
-    };
-    updateCart();
-    window.addEventListener('storage', updateCart);
-    window.addEventListener('cart:updated', updateCart);
 });

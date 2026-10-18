@@ -6,14 +6,26 @@
 
 @theme {
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
 
-    --color-cream: #f5ede4;
-    --color-cream-50: #fdfaf6;
-    --color-rose-kue: #b5475a;
-    --color-rose-kue-dark: #9a3a4b;
-    --color-rose-soft: #f9e6e8;
-    --color-choco: #4a2c27;
-    --color-choco-light: #7a5a54;
+    /* Background */
+    --color-cream: #F5EBD9;
+    --color-cream-50: #FFFCF7;
+    --color-white: #FFFFFF;
+
+    /* Buttercream Yellow */
+    --color-butter: #F7E7A9;
+    --color-butter-soft: #FFF6D9;
+
+    /* Strawberry Pink */
+    --color-rose-kue: #B5475A;
+    --color-rose-kue-dark: #9A3A4B;
+    --color-rose-soft: #F5D6DC;
+    --color-rose-pale: #FFF0F2;
+
+    /* Chocolate */
+    --color-choco: #4A2C27;
+    --color-choco-light: #7A5A54;
 }
 
 @layer base {
@@ -57,3 +69,9 @@
         @apply font-semibold text-choco;
     }
 }
+
+/* Hilangkan panah spinner pada input angka kuantitas */
+	input[data-cart-quantity]::-webkit-inner-spin-button,
+	input[data-cart-quantity]::-webkit-outer-spin-button {-webkit-appearance: none; margin: 0;}
+
+	input[data-cart-quantity] { appearance: textfield; -moz-appearance: textfield;}
