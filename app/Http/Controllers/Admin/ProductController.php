@@ -3,21 +3,39 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')
-            ->latest()
-            ->paginate(12);
+        $query = Product::with('category');
 
-        return view('admin.products.index', compact('products'));
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->filled('availability')) {
+            $query->where(
+                'is_available',
+                $request->availability === '1'
+            );
+        }
+
+        $products = $query->latest()->paginate(12)->withQueryString();
+        $categories = Category::orderBy('name')->get();
+
+        return view('admin.products.index', compact(
+            'products',
+            'categories'
+        ));
     }
 
     public function create()
@@ -53,7 +71,9 @@ class ProductController extends Controller
 
     public function show(Product $produk)
     {
-        return redirect()->route('admin.products.edit', $produk);
+        return view('admin.products.show', [
+            'product' => $produk->load('category'),
+        ]);
     }
 
     public function edit(Product $produk)

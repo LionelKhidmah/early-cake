@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\CustomCakeController as AdminCustomCakeController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CategoryController;
 
 Route::get('/', [HomeController::class, 'index'])
@@ -82,17 +83,32 @@ Route::get('/kontak', [ContactController::class, 'index'])
 Route::post('/kontak', [ContactController::class, 'send'])
     ->name('contact.send');
 
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::middleware('guest')->group(function () {
+            Route::get('/login', [AdminAuthController::class, 'create'])
+            ->name('login');
 
-Route::middleware(['auth', 'verified'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
+            Route::post('/login', [AdminAuthController::class, 'store'])
+                ->middleware('throttle:5,1')
+                ->name('login.store');
+    });
+
+    Route::post('/logout', [AdminAuthController::class, 'destroy'])
+        ->middleware(['auth', 'admin'])
+        ->name('logout');
+});
+
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::resource('/produk', AdminProductController::class)
     ->names('products');
+
+Route::post('/kategori/quick-store', [CategoryController::class, 'storeQuick'])
+    ->name('categories.quick-store');
 
 Route::resource('/kategori', CategoryController::class)
     ->names('categories');

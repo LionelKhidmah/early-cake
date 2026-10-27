@@ -1,7 +1,7 @@
 @props(['product'])
 
 @if ($product->image)
-    <img src="{{ asset($product->image)}}" alt="{{ $product->name }}"
+    <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}"
     {{ $attributes->merge([
         'class' => 'size-full object-cover',
         'loading' => 'lazy',

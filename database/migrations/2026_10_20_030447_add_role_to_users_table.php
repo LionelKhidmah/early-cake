@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('custom_cakes', function (Blueprint $table) {
-            $table->string('size')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role')->default('customer')->after('password');
         });
     }
 
     public function down(): void
     {
-        Schema::table('custom_cakes', function (Blueprint $table) {
-            $table->dropColumn('size');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
         });
     }
 };

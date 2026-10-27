@@ -34,6 +34,30 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
+    public function storeQuick(Request $request)
+{
+    $validated = $request->validate([
+        'name' => [
+            'required',
+            'string',
+            'max:255',
+            \Illuminate\Validation\Rule::unique('categories', 'name'),
+        ],
+    ]);
+
+    $category = Category::create([
+        'name' => trim($validated['name']),
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'category' => [
+            'id' => $category->id,
+            'name' => $category->name,
+        ],
+    ], 201);
+}
+
     public function edit(Category $kategori)
     {
         return view('admin.categories.edit', [

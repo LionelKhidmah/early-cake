@@ -40,3 +40,74 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', onScroll, { passive: true });
 
 });
+
+/* =========================================
+   EARLY CAKE - ADMIN SIDEBAR RESPONSIVE
+========================================= */
+
+function initAdminSidebar() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    const openButtons = document.querySelectorAll('[data-sidebar-open]');
+    const closeButtons = document.querySelectorAll('[data-sidebar-close]');
+
+    if (!sidebar || !overlay) return;
+
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    openButtons.forEach((button) => {
+        button.addEventListener('click', openSidebar);
+    });
+
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', closeSidebar);
+    });
+
+    // Tutup sidebar setelah memilih menu di HP
+    sidebar.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth < 1024) {
+                closeSidebar();
+            }
+        });
+    });
+
+    // Tutup sidebar dengan tombol Escape
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeSidebar();
+        }
+    });
+
+    // Reset kondisi saat berpindah dari HP ke desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+            overlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            sidebar.classList.remove('-translate-x-full');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdminSidebar);
+} else {
+    initAdminSidebar();
+}

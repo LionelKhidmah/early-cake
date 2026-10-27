@@ -51,9 +51,9 @@ class DashboardController extends Controller
                 ->startOfMonth()
                 ->subMonths(5);
 
-            $revenueQuery = Payment::selectRaw(
-                'DATE_FORMAT (paid_at, "%Y-%m") as month, SUM(amount) as total'
-            )
+           $revenueQuery = Payment::selectRaw(
+            'DATE_FORMAT(paid_at, "%Y-%m") as month, SUM(amount) as total'
+       )
                 ->where('payment_status', 'paid')
                 ->whereNotNull('paid_at')
                 ->where('paid_at', '>=', $startMonth)
