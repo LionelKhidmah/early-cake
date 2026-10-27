@@ -136,7 +136,7 @@
                 </a>
 
                 {{-- Login Admin --}}
-                <a href="{{ route('login') }}"
+                <a href="{{ route('admin.login') }}"
                    class="inline-flex items-center gap-2 rounded-lg border border-cream/20 px-3 py-2 text-xs font-medium text-cream/80 transition hover:border-rose-soft hover:bg-rose-soft hover:text-choco">
                     <svg class="h-4 w-4" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor" stroke-width="1.8"
