@@ -294,7 +294,7 @@
         </p>
 
         <div class="mt-5 flex flex-wrap gap-3">
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}">
                 @csrf
 
                 <button

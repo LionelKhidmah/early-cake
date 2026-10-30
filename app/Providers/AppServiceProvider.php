@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Mengarahkan link reset password ke halaman admin Early Cake.
+        ResetPassword::createUrlUsing(
+            function ($notifiable, string $token) {
+                return route('admin.password.reset', [
+                    'token' => $token,
+                    'email' => $notifiable->getEmailForPasswordReset(),
+                ]);
+            }
+        );
     }
 }

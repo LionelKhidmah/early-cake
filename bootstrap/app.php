@@ -11,9 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+
+        // Alias middleware admin
         $middleware->alias([
-    'admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'admin' => \App\Http\Middleware\EnsureAdmin::class,
         ]);
+
+        // Pengunjung yang belum login diarahkan ke login admin
+        $middleware->redirectGuestsTo(
+            fn () => route('admin.login')
+        );
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

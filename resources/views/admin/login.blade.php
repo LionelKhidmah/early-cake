@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="text-right">
-                        <a href="{{ route('password.request') }}" class="text-sm font-medium text-[#b34f69] hover:underline">
+                        <a href="{{ route('admin.password.request') }}" class="text-sm font-medium text-[#b34f69] hover:underline">
                             Lupa kata sandi?
                         </a>
                     </div>

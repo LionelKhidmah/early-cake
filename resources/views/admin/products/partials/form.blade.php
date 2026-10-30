@@ -128,7 +128,7 @@
                     Deskripsi
                 </label>
                 <textarea id="description" name="description" rows="4"
-                          class="w-full rounded-xl border border-[#eadbd2] px-4 py-3 text-sm focus:border-[#bd7b83] focus:outline-none"
+                          class="w-full rounded-xl border border-[#eadbd2] px-4 py-3 text-sm resize-none focus:border-[#bd7b83] focus:outline-none"
                           placeholder="Jelaskan rasa, ukuran, atau detail produk...">{{ old('description', $product->description ?? '') }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
