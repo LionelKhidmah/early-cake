@@ -1,9 +1,9 @@
 @php
 $links = [
-['label' => 'Home', 'route' => 'home', 'pattern' => ''],
+['label' => 'Beranda', 'route' => 'home', 'pattern' => ''],
 ['label' => 'Menu', 'route' => 'products.index', 'pattern' => 'produk*'],
 ['label' => 'Promo', 'route' => 'promo.index', 'pattern' => 'promo*'],
-['label' => 'Kue Custom', 'route' => 'custom-cake.index', 'pattern' => 'custom-cake*'],
+['label' => 'Kue Kustom', 'route' => 'custom-cake.index', 'pattern' => 'custom-cake*'],
 ['label' => 'Tentang Kami', 'route' => 'about', 'pattern' => 'tentang-kami*'],
 ['label' => 'Kontak', 'route' => 'contact', 'pattern' => 'kontak*'],
 ];
