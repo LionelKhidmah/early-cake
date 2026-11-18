@@ -15,6 +15,10 @@ class CustomCake extends Model
         'cake_type',
         'size',
         'flavor',
+        'shape',
+        'color',
+        'decorations',
+        'design_config',
         'theme',
         'message',
         'reference_image',
@@ -22,10 +26,33 @@ class CustomCake extends Model
         'estimated_price',
         'final_price',
         'status',
+        'notification_token_hash',
+        'rejection_reason',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'decorations' => 'array',
+            'design_config' => 'array',
+            'estimated_price' => 'decimal:2',
+            'final_price' => 'decimal:2',
+        ];
+    }
 
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function notifications()
+    {
+    return $this->hasMany(CustomCakeNotification::class);
+    }
+
+    public function pushSubscriptions()
+    {
+    return $this->hasMany(CustomCakePushSubscription::class);
+    }
+
 }

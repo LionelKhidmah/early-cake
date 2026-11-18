@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Promo;
+use Illuminate\View\View;
 
 class PromoController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return view('customer.promo.index');
+        $promos = Promo::query()
+            ->active()
+            ->orderBy('ends_at')
+            ->paginate(9);
+
+        return view('customer.promo.index', compact('promos'));
     }
 
-    public function show($id)
+    public function show(int $id): View
     {
-        return view('customer.promo.show', compact('id'));
+        $promo = Promo::query()
+            ->active()
+            ->findOrFail($id);
+
+        return view('customer.promo.show', compact('promo'));
     }
 }
