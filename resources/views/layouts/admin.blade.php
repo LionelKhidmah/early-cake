@@ -42,6 +42,12 @@
                     'active' => 'admin.custom-cakes.*',
                     'icon' => 'cake',
                 ],
+                [
+                    'label' => 'Kelola Kue Kustom',
+                    'route' => 'admin.custom-cake-options.index',
+                    'active' => 'admin.custom-cake-options.*',
+                    'icon' => 'custom-options',
+                ],
             ],
         ],
         [
@@ -75,6 +81,10 @@
     <title>@yield('title', 'Dashboard') | Early Cake Admin</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- SweetAlert2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @stack('styles')
 </head>
 
@@ -298,7 +308,21 @@
                                                     <path d="M4 20V10M10 20V4M16 20v-7M22 20V8"/>
                                                 </svg>
                                                 @break
+                                            
+                                            {{-- CUSTOM OPTIONS --}}
+                                            @case('custom-options')
+                                                <svg class="size-5" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor"
+                                                    stroke-width="1.8"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round">
 
+                                                    <path d="M4 5h16M4 12h16M4 19h16"/>
+                                                    <circle cx="8" cy="5" r="2" fill="#FFF7F9"/>
+                                                    <circle cx="16" cy="12" r="2" fill="#FFF7F9"/>
+                                                    <circle cx="10" cy="19" r="2" fill="#FFF7F9"/>
+                                                </svg>
+                                            @break
                                         @endswitch
                                     </span>
 
