@@ -10,9 +10,13 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderTrackingController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomCakeNotificationController;
+use App\Http\Controllers\CustomCakeStatusController;
 
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CustomCakeOptionController as AdminCustomCakeOptionController;
+use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\CustomCakeController as AdminCustomCakeController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
@@ -82,6 +86,52 @@ Route::get('/kontak', [ContactController::class, 'index'])
 Route::post('/kontak', [ContactController::class, 'send'])
     ->name('contact.send');
 
+// Notifikasi Custom Cake
+Route::get('/notifikasi-custom-cake/{token}', [
+    CustomCakeNotificationController::class,
+    'index',
+])->name('custom-cake.notifications');
+
+Route::get(
+    '/notifikasi-custom-cake/status/{orderNumber}/{customCakeId}',
+    [CustomCakeNotificationController::class, 'openStatus']
+)->middleware('signed')
+ ->name('custom-cake.notifications.status');
+
+Route::patch('/notifikasi-custom-cake/{token}/{notification}/baca', [
+    CustomCakeNotificationController::class,
+    'markAsRead',
+])->name('custom-cake.notifications.read');
+
+Route::post(
+    '/notifikasi-custom-cake/{token}/subscribe',
+    [CustomCakeNotificationController::class, 'subscribe']
+)->name('custom-cake.notifications.subscribe');
+
+// Cek Status Custom Cake
+Route::get('/custom-cake/cek-status', [
+    CustomCakeStatusController::class,
+    'index',
+])->name('custom-cake.status.check');
+
+Route::post('/custom-cake/cek-status', [
+    CustomCakeStatusController::class,
+    'lookup',
+])->name('custom-cake.status.lookup');
+
+Route::get('/custom-cake/status/{orderNumber}', [
+    CustomCakeStatusController::class,
+    'show',
+])->name('custom-cake.status.show');
+
+Route::post('/custom-cake/status/{orderNumber}/desain-ulang', [CustomCakeStatusController::class,'redesign',])
+            ->name('custom-cake.redesign');
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN AUTHENTICATION
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'verified'])
     ->prefix('admin')
@@ -123,6 +173,18 @@ Route::get('/pembayaran', [AdminPaymentController::class, 'index'])
 
 Route::patch('/pembayaran/{payment}/status', [AdminPaymentController::class,'updateStatus',])
     ->name('payments.update-status');
+
+        Route::delete('/custom-cakes/{customCake}', [AdminCustomCakeController::class, 'destroy'])
+            ->name('custom-cakes.destroy');
+
+        // Pengaturan Pilihan Custom Cake
+        Route::resource('/custom-cake-options', AdminCustomCakeOptionController::class)
+            ->except(['show'])
+            ->names('custom-cake-options');
+
+        // Pembayaran
+        Route::get('/pembayaran', [AdminPaymentController::class, 'index'])
+            ->name('payments.index');
 
     });
 

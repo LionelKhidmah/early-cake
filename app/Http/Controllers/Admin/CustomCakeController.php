@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomCake;
+use App\Models\CustomCakeNotification;
+use App\Services\CustomCakePushService;
 use Illuminate\Http\Request;
 
 class CustomCakeController extends Controller
 {
-    /**
-     * Menampilkan daftar pengajuan custom cake.
-     */
     public function index()
     {
         $customCakes = CustomCake::with('order.customer')
@@ -20,9 +19,6 @@ class CustomCakeController extends Controller
         return view('admin.custom-cakes.index', compact('customCakes'));
     }
 
-    /**
-     * Menampilkan detail pengajuan custom cake.
-     */
     public function show(CustomCake $customCake)
     {
         $customCake->load('order.customer');
@@ -30,13 +26,13 @@ class CustomCakeController extends Controller
         return view('admin.custom-cakes.show', compact('customCake'));
     }
 
-    /**
-     * Menentukan harga custom cake.
-     */
     public function updatePrice(Request $request, CustomCake $customCake)
     {
         if (in_array($customCake->status, ['rejected', 'completed'])) {
-            return back()->with('error', 'Pengajuan ini tidak dapat diubah harganya.');
+            return back()->with(
+                'error',
+                'Pengajuan ini tidak dapat diubah harganya.'
+            );
         }
 
         $validated = $request->validate([
@@ -44,32 +40,115 @@ class CustomCakeController extends Controller
             'final_price' => ['required', 'numeric', 'min:0'],
         ]);
 
+        $oldPrice = $customCake->final_price;
+        $newPrice = (float) $validated['final_price'];
+
+        $priceChanged = $oldPrice === null
+            || (float) $oldPrice !== $newPrice;
+
         $customCake->update([
             'estimated_price' => $validated['estimated_price'] ?? null,
-            'final_price' => $validated['final_price'],
-            'status' => 'reviewed',
+            'final_price' => $newPrice,
         ]);
 
-        return back()->with('success', 'Harga custom cake berhasil diperbarui.');
+        if ($priceChanged) {
+            CustomCakeNotification::create([
+                'custom_cake_id' => $customCake->id,
+                'title' => 'Harga Custom Cake Diperbarui',
+                'message' => 'Admin telah memperbarui harga custom cake kamu menjadi Rp'
+                    . number_format($newPrice, 0, ',', '.')
+                    . '. Silakan periksa kembali detail pengajuanmu.',
+                'type' => 'price',
+            ]);
+        }
+
+        return back()->with(
+            'success',
+            'Harga custom cake berhasil diperbarui.'
+        );
     }
 
-    /**
-     * Memperbarui status pengajuan custom cake.
-     */
     public function updateStatus(Request $request, CustomCake $customCake)
     {
         $validated = $request->validate([
             'status' => [
                 'required',
-                'in:pending,reviewed,approved,rejected,completed',
+                'in:pending,approved,rejected,completed',
             ],
+            'rejection_reason' => [
+                'required_if:status,rejected',
+                'nullable',
+                'string',
+                'max:1000',
+            ],
+        ], [
+            'rejection_reason.required_if' =>
+                'Alasan penolakan wajib diisi.',
+            'rejection_reason.max' =>
+                'Alasan penolakan maksimal 1000 karakter.',
         ]);
+
+        $oldStatus = $customCake->status;
+        $newStatus = $validated['status'];
+
+        if ($oldStatus === $newStatus) {
+            return back()->with(
+                'success',
+                'Status pengajuan tidak mengalami perubahan.'
+            );
+        }
+
+        $rejectionReason = $newStatus === 'rejected'
+            ? trim($validated['rejection_reason'] ?? '')
+            : null;
+
+        if ($newStatus === 'rejected' && $rejectionReason === '') {
+            return back()->withErrors([
+                'rejection_reason' => 'Alasan penolakan wajib diisi.',
+            ]);
+        }
 
         $customCake->update([
-            'status' => $validated['status'],
+            'status' => $newStatus,
+            'rejection_reason' => $rejectionReason,
         ]);
 
-        return back()->with('success', 'Status custom cake berhasil diperbarui.');
+        $statusLabels = [
+            'pending' => 'Menunggu',
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak',
+            'completed' => 'Selesai',
+        ];
+
+        $statusMessages = [
+            'pending' => 'Pengajuan custom cake kamu sedang menunggu pemeriksaan admin.',
+            'approved' => 'Kabar baik! Pengajuan custom cake kamu telah disetujui.',
+            'rejected' => 'Mohon maaf, pengajuan custom cake kamu ditolak. Alasan: '
+                . $rejectionReason,
+            'completed' => 'Custom cake kamu telah selesai diproses.',
+        ];
+
+        $notification = CustomCakeNotification::create([
+            'custom_cake_id' => $customCake->id,
+            'title' => 'Status Custom Cake: ' . $statusLabels[$newStatus],
+            'message' => $statusMessages[$newStatus],
+            'type' => 'status',
+        ]);
+
+        app(CustomCakePushService::class)->send($notification);
+
+        return back()->with(
+            'success',
+            'Status custom cake berhasil diperbarui.'
+        );
+    }
+
+    public function destroy(CustomCake $customCake)
+    {
+        $customCake->delete();
+
+        return redirect()
+            ->route('admin.custom-cakes.index')
+            ->with('success', 'Pengajuan custom cake berhasil dihapus.');
     }
 }
-
